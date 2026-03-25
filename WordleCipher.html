@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nebula Decoder</title>
+    <style>
+        /* Space Background Styling */
+        body {
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background: #0b0d17;
+            background-size: cover;
+            color: white;
+            overflow: hidden;
+        }
+
+        /* Glassmorphism Card */
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 40px;
+            width: 80%; /* Increased width for longer text */
+            max-width: 500px;
+            text-align: center;
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.8);
+        }
+
+        h2 {
+            margin-top: 0;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            font-size: 1.5rem;
+            color: #00d2ff;
+            text-shadow: 0 0 10px rgba(0, 210, 255, 0.5);
+        }
+
+        p { font-size: 0.9rem; opacity: 0.8; margin-bottom: 25px; }
+
+        /* Input Styling */
+        input {
+            width: 90%;
+            padding: 12px;
+            font-size: 1.2rem;
+            border-radius: 8px;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            background: rgba(0, 0, 0, 0.3);
+            color: #00d2ff;
+            text-transform: uppercase;
+            text-align: center;
+            margin-bottom: 20px;
+            transition: all 0.3s ease;
+            outline: none;
+            letter-spacing: 2px; /* Reduced spacing for long words */
+        }
+
+        input:focus {
+            border-color: #00d2ff;
+            box-shadow: 0 0 15px rgba(0, 210, 255, 0.3);
+        }
+
+        button {
+            width: 90%;
+            padding: 12px;
+            font-size: 1rem;
+            background: linear-gradient(45deg, #00d2ff, #3a7bd5);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(0, 210, 255, 0.4);
+        }
+
+        #result {
+            margin-top: 30px;
+            padding: 15px;
+            border-radius: 8px;
+            font-size: 1.1rem; /* Slightly smaller for long phrases */
+            min-height: 1.5rem;
+            background: rgba(0, 210, 255, 0.1);
+            border: 1px dashed rgba(0, 210, 255, 0.3);
+            display: none; 
+            word-wrap: break-word; /* Wraps text if it's too long */
+        }
+
+        .word-reveal {
+            color: #fff;
+            text-shadow: 0 0 10px #00d2ff;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="glass-panel">
+        <h2>System Decoder</h2>
+        <p>Intercepting encrypted transmission...</p>
+        
+        <!-- Removed maxlength="5" -->
+        <input type="text" id="codeInput" placeholder="ENTER SIGNAL" autocomplete="off">
+        
+        <button onclick="solveWord()">Decrypt Signal</button>
+
+        <div id="result">
+            <span id="outputLabel" style="font-size: 0.8rem; display: block; opacity: 0.7; margin-bottom: 5px;">DECODED MESSAGE:</span>
+            <span id="wordOutput" class="word-reveal"></span>
+        </div>
+    </div>
+
+    <script>
+        function solveWord() {
+            const code = document.getElementById('codeInput').value.toUpperCase();
+            const key = "WORDLE";
+            const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+            const resultBox = document.getElementById('result');
+            
+            // Removed length check, now only checks if empty
+            if (code.length === 0) {
+                alert("Please enter a signal.");
+                return;
+            }
+
+            let decrypted = "";
+            for (let i = 0; i < code.length; i++) {
+                const cVal = alphabet.indexOf(code[i]);
+                
+                // Allow spaces or characters not in the alphabet to pass through
+                if (cVal === -1) {
+                    decrypted += code[i];
+                    continue;
+                }
+
+                const kVal = alphabet.indexOf(key[i % key.length]);
+                let charVal = (cVal - kVal);
+                if (charVal < 0) charVal += 26;
+                decrypted += alphabet[charVal];
+            }
+
+            resultBox.style.display = 'block';
+            document.getElementById('wordOutput').innerText = decrypted;
+        }
+    </script>
+</body>
+</html>
