@@ -1,0 +1,1 @@
+Do not take this code and say it is yours and change it a bit, that would be against my copywrite laws and also if you make a youtube video about using this make atleast a hastage about #Wordle223 please
